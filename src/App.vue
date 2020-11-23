@@ -1,18 +1,59 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <div class="container">
+    <colunm-list :list="list" v-show="flag"></colunm-list>
+    <GlobalHeader :users="users"></GlobalHeader>
+  </div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component'
-import HelloWorld from './components/HelloWorld.vue'
-
-@Options({
+import { defineComponent } from 'vue'
+import ColunmList, { ColunmProp } from './components/ColunmList.vue'
+import GlobalHeader, { UsersProps } from './components/GlobalHeader.vue';
+import 'bootstrap/dist/css/bootstrap.min.css'
+const tableList: ColunmProp[] = [
+  {
+    id: '1',
+    avatar: 'https://cdn4.buysellads.net/uu/1/3386/1525189943-38523.png',
+    title: 'hello1',
+    describution: 'woo'
+  }, {
+    id: '2',
+    avatar: 'https://cdn4.buysellads.net/uu/1/3386/1525189943-38523.png',
+    title: 'hello1',
+    describution: 'woo'
+  }, {
+    id: '3',
+    avatar: 'https://cdn4.buysellads.net/uu/1/3386/1525189943-38523.png',
+    title: 'hello1',
+    describution: 'woo'
+  }, {
+    id: '4',
+    avatar: 'https://cdn4.buysellads.net/uu/1/3386/1525189943-38523.png',
+    title: 'hello1',
+    describution: 'woo'
+  }
+]
+const users: UsersProps = {
+  isLogin: false
+}
+export default defineComponent({
+  name: 'App',
   components: {
-    HelloWorld
+    ColunmList,
+    GlobalHeader
+  },
+  data () {
+    return {
+      flag: false
+    }
+  },
+  setup () {
+    return {
+      list: tableList,
+      users: users
+    }
   }
 })
-export default class App extends Vue {}
 </script>
 
 <style>
