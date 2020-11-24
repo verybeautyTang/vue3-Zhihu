@@ -8,7 +8,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import ColunmList, { ColunmProp } from './components/ColunmList.vue'
-import GlobalHeader, { UsersProps } from './components/GlobalHeader.vue';
+import GlobalHeader, { UsersProps } from './components/GlobalHeader.vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 const tableList: ColunmProp[] = [
   {
@@ -34,7 +34,8 @@ const tableList: ColunmProp[] = [
   }
 ]
 const users: UsersProps = {
-  isLogin: false
+  isLogin: true,
+  name: 'beautyTang'
 }
 export default defineComponent({
   name: 'App',
