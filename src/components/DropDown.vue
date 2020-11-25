@@ -10,7 +10,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, setup, onMounted, onUnmounted } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
+import useClickOutSide from '../hooks/useDropDown'
 export default defineComponent({
   props: {
     title: {
@@ -21,23 +22,19 @@ export default defineComponent({
   setup () {
     const isOpen = ref(false)
     const dropdrownRef = ref<null | HTMLElement>(null)
+    const isClickOutSide = useClickOutSide(dropdrownRef)
+    watch(isClickOutSide, () => {
+      if (isOpen.value && isClickOutSide.value) {
+        isOpen.value = false
+      }
+    })
     const clickToggle = () => {
       isOpen.value = !isOpen.value
     }
-    const handle = (e: MouseEvent) => {
-      if (dropdrownRef.value && !dropdrownRef.value.contains(e.target as HTMLElement) && isOpen.value) {
-        isOpen.value = false
-      }
-    }
-    onMounted(() => {
-      document.addEventListener('click', handle)
-    })
-    onUnmounted(() => {
-      document.removeEventListener('click', handle)
-    })
     return {
       isOpen,
-      clickToggle
+      clickToggle,
+      dropdrownRef
     }
   }
 })
