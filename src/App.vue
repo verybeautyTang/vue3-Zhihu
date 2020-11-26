@@ -2,16 +2,27 @@
   <div class="container">
     <colunm-list :list="list" v-show="flag"></colunm-list>
     <GlobalHeader :users="users"></GlobalHeader>
-    <form>
-      <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">邮箱</label>
-        <valid-rules :rules="emailRule" class="www" v-model="emailVal" placeholder="请输入邮箱名称" type="text" />
+    <from-control @form-send="formSend">
+      <div>
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">邮箱</label>
+          <valid-rules
+          :rules="emailRule"
+          class="www"
+          v-model="emailVal"
+          placeholder="请输入邮箱名称"
+          type="text" />
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">密码</label>
+          <valid-rules :rules="pwdRule" v-model="pwdVal" placeholder="请输入密码" type="password" />
+        </div>
       </div>
-      <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">密码</label>
-        <valid-rules :rules="pwdRule" v-model="pwdVal" placeholder="请输入密码" type="password" />
-      </div>
-    </form>
+      <template #submit-button> <!-- #submit-button 相当于  v-slot:submit-button-->
+      <!-- v-slot的缩写是# -->
+        <button class="btn btn-danger" @form-send="formSend">提交</button>
+      </template>
+    </from-control>
   </div>
 </template>
 
@@ -20,6 +31,7 @@ import { defineComponent, reactive, ref } from 'vue'
 import ColunmList, { ColunmProp } from './components/ColunmList.vue'
 import GlobalHeader, { UsersProps } from './components/GlobalHeader.vue'
 import ValidRules, { ValidRule } from './components/ValidRules.vue'
+import FromControl from './components/FromControl.vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 const tableList: ColunmProp[] = [
   {
@@ -75,7 +87,8 @@ export default defineComponent({
   components: {
     ColunmList,
     GlobalHeader,
-    ValidRules
+    ValidRules,
+    FromControl
   },
   data () {
     return {
@@ -94,8 +107,9 @@ export default defineComponent({
       message: '',
       val: ''
     })
-    const emailVal = ref('') // email的默认数值
-    const pwdVal = ref('')
+    const emailVal = ref('111') // email的默认数值
+    const pwdVal = ref('2212')
+    const inputRefs = ref<any>()
     const emialValid = () => {
       if (!emailRef.val.trim()) {
         emailRef.error = true
@@ -105,16 +119,22 @@ export default defineComponent({
         emailRef.message = '邮箱验证错误'
       }
     }
+    const formSend = (e: boolean) => {
+      // console.log('inputRefs', inputRefs.value.inputValid()); // 利用ref可以进行父子间通信
+      console.log('1111', e)
+    }
     return {
       list: tableList,
       users: users,
       emailRef,
       emialValid,
       inputRef,
+      inputRefs,
       pwdRule,
       pwdVal,
       emailRule,
-      emailVal
+      emailVal,
+      formSend
     }
   }
 })

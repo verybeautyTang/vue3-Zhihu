@@ -14,7 +14,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, reactive } from 'vue'
+import { emitter } from './FromControl.vue'
+import { defineComponent, onMounted, PropType, reactive } from 'vue'
 export interface ValidRule {
   type: 'required'| 'email' | 'pwd' | 'minlen'| 'maxlen';
   message: string;
@@ -64,7 +65,9 @@ export default defineComponent({
           return passed
         })
         inputRef.error = !allCheck
+        return allCheck
       }
+      return true
     }
     // Vue3的v-modal 与vue2很多不同
     const updatValue = (e: KeyboardEvent) => {
@@ -72,6 +75,9 @@ export default defineComponent({
       inputRef.val = targetValue
       context.emit('update:modelValue', targetValue)
     }
+    onMounted(() => {
+      emitter.emit('create-child', inputRef.val)
+    })
     return {
       inputRef,
       inputValid,
