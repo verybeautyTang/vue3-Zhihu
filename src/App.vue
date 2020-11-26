@@ -72,12 +72,6 @@ const pwdRule: ValidRule[] = [
   {
     type: 'required', message: '密码不能为空'
   },
-  // {
-  //   type: 'minlen', message: '密码不得少于6个字符'
-  // },
-  // {
-  //   type: 'maxlen', message: '密码不得多于20个字符'
-  // },
   {
     type: 'pwd', message: '密码必须包含数字和字母，长度6-20'
   }
@@ -96,7 +90,6 @@ export default defineComponent({
     }
   },
   setup () {
-    const emailRu = /^[A-Za-zd]+([-_.][A-Za-zd]+)*@([A-Za-zd]+[-.])+[A-Za-zd]{2,5}$/
     const emailRef = reactive({
       error: false,
       message: '',
@@ -107,27 +100,17 @@ export default defineComponent({
       message: '',
       val: ''
     })
-    const emailVal = ref('111') // email的默认数值
-    const pwdVal = ref('2212')
+    const emailVal = ref('') // email的默认数值
+    const pwdVal = ref('')
     const inputRefs = ref<any>()
-    const emialValid = () => {
-      if (!emailRef.val.trim()) {
-        emailRef.error = true
-        emailRef.message = '邮箱不能为空'
-      } else if (!emailRu.test(emailRef.val)) {
-        emailRef.error = true
-        emailRef.message = '邮箱验证错误'
-      }
-    }
-    const formSend = (e: boolean) => {
+    const formSend = (result: boolean) => {
       // console.log('inputRefs', inputRefs.value.inputValid()); // 利用ref可以进行父子间通信
-      console.log('1111', e)
+      console.log('result', result)
     }
     return {
       list: tableList,
       users: users,
       emailRef,
-      emialValid,
       inputRef,
       inputRefs,
       pwdRule,

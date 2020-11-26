@@ -20,7 +20,7 @@ export interface ValidRule {
   type: 'required'| 'email' | 'pwd' | 'minlen'| 'maxlen';
   message: string;
 }
-const emailReg = /^[A-Za-zd]+([-_.][A-Za-zd]+)*@([A-Za-zd]+[-.])+[A-Za-zd]{2,5}$/
+const emailReg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
 const pwdReg = /^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?!([^(0-9a-zA-Z)])+$).{6,20}$/
 export default defineComponent({
   props: {
@@ -75,8 +75,9 @@ export default defineComponent({
       inputRef.val = targetValue
       context.emit('update:modelValue', targetValue)
     }
+    // 移除事件
     onMounted(() => {
-      emitter.emit('create-child', inputRef.val)
+      emitter.emit('create-child', inputValid)
     })
     return {
       inputRef,
