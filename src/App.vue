@@ -5,30 +5,21 @@
     <form>
       <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">邮箱</label>
-        <input
-          type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-          @blur="emialValid"
-          v-modal="emailRef.val"
-        >
-        <div id="emailHelp" class="form-text" v-show="emailRef.error">{{emailRef.message}}</div>
+        <valid-rules :rules="emailRule" class="www" v-model="emailVal" placeholder="请输入邮箱名称" type="text" />
       </div>
       <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">密码</label>
-        <input type="password" class="form-control" id="exampleInputPassword1">
+        <label for="exampleInputEmail1" class="form-label">密码</label>
+        <valid-rules :rules="pwdRule" v-model="pwdVal" placeholder="请输入密码" type="password" />
       </div>
-      <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-        <!-- <label class="form-check-label" for="exampleCheck1">Check me out</label> -->
-      </div>
-      <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
     </form>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import ColunmList, { ColunmProp } from './components/ColunmList.vue'
 import GlobalHeader, { UsersProps } from './components/GlobalHeader.vue'
+import ValidRules, { ValidRule } from './components/ValidRules.vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 const tableList: ColunmProp[] = [
   {
@@ -57,11 +48,34 @@ const users: UsersProps = {
   isLogin: true,
   name: 'beautyTang'
 }
+const emailRule: ValidRule[] = [
+  {
+    type: 'required', message: '邮箱名不能为空'
+  },
+  {
+    type: 'email', message: '请输入正确的邮箱号'
+  }
+]
+const pwdRule: ValidRule[] = [
+  {
+    type: 'required', message: '密码不能为空'
+  },
+  // {
+  //   type: 'minlen', message: '密码不得少于6个字符'
+  // },
+  // {
+  //   type: 'maxlen', message: '密码不得多于20个字符'
+  // },
+  {
+    type: 'pwd', message: '密码必须包含数字和字母，长度6-20'
+  }
+]
 export default defineComponent({
   name: 'App',
   components: {
     ColunmList,
-    GlobalHeader
+    GlobalHeader,
+    ValidRules
   },
   data () {
     return {
@@ -69,22 +83,38 @@ export default defineComponent({
     }
   },
   setup () {
+    const emailRu = /^[A-Za-zd]+([-_.][A-Za-zd]+)*@([A-Za-zd]+[-.])+[A-Za-zd]{2,5}$/
     const emailRef = reactive({
       error: false,
       message: '',
       val: ''
     })
+    const inputRef = reactive({
+      error: false,
+      message: '',
+      val: ''
+    })
+    const emailVal = ref('') // email的默认数值
+    const pwdVal = ref('')
     const emialValid = () => {
-      if (!emailRef.val) {
+      if (!emailRef.val.trim()) {
         emailRef.error = true
         emailRef.message = '邮箱不能为空'
+      } else if (!emailRu.test(emailRef.val)) {
+        emailRef.error = true
+        emailRef.message = '邮箱验证错误'
       }
     }
     return {
       list: tableList,
       users: users,
       emailRef,
-      emialValid
+      emialValid,
+      inputRef,
+      pwdRule,
+      pwdVal,
+      emailRule,
+      emailVal
     }
   }
 })
