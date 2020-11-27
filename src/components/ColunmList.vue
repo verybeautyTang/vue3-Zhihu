@@ -8,6 +8,7 @@
             <h5 class="card-title">{{item.title}}</h5>
             <p class="card-text">{{item.describution}}</p>
             <button class="btn btn-outline-primary">查看详情</button>
+            <!-- <router-link :to="`/column/${column.id}`" class="btn btn-outline-primary">查看详情</router-link> -->
           </div>
         </div>
       </div>
