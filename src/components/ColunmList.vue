@@ -7,7 +7,7 @@
             <img class="rounded-circle border border-light w-25 my-3" :src="item.avatar" />
             <h5 class="card-title">{{item.title}}</h5>
             <p class="card-text">{{item.describution}}</p>
-            <button class="btn btn-outline-primary">查看详情</button>
+            <router-link :to="`/column/${item.id}`" class="btn btn-outline-primary">查看详情</router-link>
             <!-- <router-link :to="`/column/${column.id}`" class="btn btn-outline-primary">查看详情</router-link> -->
           </div>
         </div>

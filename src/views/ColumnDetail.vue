@@ -1,11 +1,19 @@
 <template>
-  <div>wwww</div>
+  <pre>{{route}}</pre>
+
 </template>
 
 <script lang='ts'>
-export default {
-}
+import { defineComponent } from 'vue'
+import { useRoute } from 'vue-router'
+export default defineComponent({
+  setup () {
+    const route = useRoute()
+    return {
+      route
+    }
+  }
+})
 </script>
-
-<style lang='stylus' rel='stylesheet/stylus'>
+<style>
 </style>

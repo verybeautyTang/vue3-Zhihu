@@ -29,12 +29,11 @@
   </from-control>
 </template>
 
-<script>
-import ValidRules, { ValidRule } from '../components/ValidRules.vue'
-import FromControl from '../components/FromControl.vue'
+<script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-
+import ValidRules, { ValidRule } from '../components/ValidRules.vue'
+import FromControl from '../components/FromControl.vue'
 const emailRule: ValidRule[] = [
   {
     type: 'required', message: '邮箱名不能为空'
@@ -52,18 +51,22 @@ const pwdRule: ValidRule[] = [
   }
 ]
 export default defineComponent({
-  name: 'App',
+  name: 'Login',
   components: {
     ValidRules,
     FromControl
   },
-    setup () {
+  setup () {
     const emailVal = ref('') // email的默认数值
+    const router = useRouter()
     const pwdVal = ref('')
     // const inputRefs = ref<any>()
     const formSend = (result: boolean) => {
       // console.log('inputRefs', inputRefs.value.inputValid()); // 利用ref可以进行父子间通信
       console.log('result', result)
+      if (result) {
+        router.push({ name: 'column', params: { id: 1 } })
+      }
     }
     return {
       // inputRefs,
@@ -76,5 +79,3 @@ export default defineComponent({
   }
 })
 </script>
-<style>
-</style>
