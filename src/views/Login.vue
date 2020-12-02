@@ -31,6 +31,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
+import { useStore } from 'vuex';
 import { useRouter } from 'vue-router'
 import ValidRules, { ValidRule } from '../components/ValidRules.vue'
 import FromControl from '../components/FromControl.vue'
@@ -57,6 +58,7 @@ export default defineComponent({
     FromControl
   },
   setup () {
+    const store = useStore()
     const emailVal = ref('') // email的默认数值
     const router = useRouter()
     const pwdVal = ref('')
@@ -65,7 +67,8 @@ export default defineComponent({
       // console.log('inputRefs', inputRefs.value.inputValid()); // 利用ref可以进行父子间通信
       console.log('result', result)
       if (result) {
-        router.push({ name: 'column', params: { id: 1 } })
+        router.push('/')
+        store.commit('login') // 触发mutation事件
       }
     }
     return {

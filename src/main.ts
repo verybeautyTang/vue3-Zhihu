@@ -3,7 +3,6 @@ import router from './router'
 import store from './store'
 import App from './App.vue'
 const app = createApp(App)
-app.use(router)
-app.use(store)
+app.use(router) // 挂载路由
+app.use(store) // 挂载状态管理器
 app.mount('#app')
-// createApp(App).mount('#app')

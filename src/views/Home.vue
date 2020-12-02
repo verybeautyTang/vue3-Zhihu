@@ -4,7 +4,9 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { GlobalDataProp } from '@/store'
+import { defineComponent, computed } from 'vue'
+import { useStore } from 'vuex'
 import ColunmList, { ColunmProp } from '../components/ColunmList.vue'
 const tableList: ColunmProp[] = [
   {
@@ -39,8 +41,10 @@ export default defineComponent({
     }
   },
   setup () {
+    const store = useStore<GlobalDataProp>()
+    const list = computed(() => store.state.column)
     return {
-      list: tableList
+      list
     }
   }
 })

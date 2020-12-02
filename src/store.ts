@@ -17,6 +17,11 @@ const store = createStore<GlobalDataProp>({ // 加入泛型是为了返回指定
     user: {
       isLogin: false
     }
+  },
+  mutations: {
+    login (state) {
+      state.user = { ...state.user, isLogin: true, name: 'beautyTang' }
+    }
   }
 })
 export default store
