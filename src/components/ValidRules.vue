@@ -2,6 +2,7 @@
   <div>
     <!-- $attrs自定义组件无法绑定数据，可以用v-bind。其中$attrs里面有数据 -->
     <input
+      v-if="tag !== 'textarea'"
       class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
       :value="inputRef.val"
       @blur="inputValid"
@@ -9,6 +10,16 @@
       v-bind="$attrs"
       :class="{'is-invalid':inputRef.error}"
       >
+    <textarea
+      v-else
+      class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+      :value="inputRef.val"
+      rows="5"
+      @blur="inputValid"
+      @input="updatValue"
+      v-bind="$attrs"
+      :class="{'is-invalid':inputRef.error}"
+      ></textarea>
       <div id="emailHelp" class="invalid-feedback" v-show="inputRef.error">{{inputRef.message}}</div>
   </div>
 </template>
@@ -22,13 +33,18 @@ export interface ValidRule {
 }
 const emailReg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
 const pwdReg = /^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?!([^(0-9a-zA-Z)])+$).{6,20}$/
+export type TagType = 'input' | 'textarea'
 export default defineComponent({
   props: {
     rules: {
       type: Array as PropType<ValidRule[]>,
       required: true
     },
-    modelValue: String
+    modelValue: String,
+    tag: {
+      type: String as PropType<TagType>,
+      default: 'input'
+    }
   },
   inheritAttrs: false, // 不继承属性
   setup (props, context) {

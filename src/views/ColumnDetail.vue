@@ -19,8 +19,9 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { useStore } from 'vuex'
 import post from '../components/Post.vue'
 import { columnData, columnList } from '../hooks/data'
 export default defineComponent({
@@ -30,8 +31,11 @@ export default defineComponent({
   setup () {
     const route = useRoute()
     const columnId = +route.params.id
-    const column = columnData.find(column => column.id === columnId)
-    const list = columnList.filter(column => column.columnId === columnId)
+    const store = useStore()
+    // const column = columnData.find(column => column.id === columnId) //详情页面的表头，根据router的id获得
+    // const list = columnList.filter(column => column.columnId === columnId) // 详情页面的表单，也是根据routerid可以获得
+    const column = computed(() => store.getters.getColumnData(columnId))
+    const list = computed(() => store.getters.getPostData(columnId))
     console.log(list);
     return {
       route,

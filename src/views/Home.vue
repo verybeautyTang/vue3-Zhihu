@@ -1,6 +1,8 @@
 <template>
   <div>
     <colunm-list :list="list"></colunm-list>
+    <p>{{bigLen}}</p>
+    <router-link to='/CreatePost'>新建文章</router-link>
   </div>
 </template>
 <script lang="ts">
@@ -43,8 +45,10 @@ export default defineComponent({
   setup () {
     const store = useStore<GlobalDataProp>()
     const list = computed(() => store.state.column)
+    const bigLen = computed(() => store.getters.bigColumnLen)
     return {
-      list
+      list,
+      bigLen
     }
   }
 })

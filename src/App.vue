@@ -19,7 +19,8 @@ export default defineComponent({
   },
   setup () {
     const store = useStore()
-    const user = computed(() => store.state.users)
+    const user = computed(() => store.state.user)
+
     return {
       user
     }
