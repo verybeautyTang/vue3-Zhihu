@@ -1,20 +1,47 @@
-import { createStore } from 'vuex'
-import { columnData, columnList, ColumnProps, ColumnList } from './hooks/data'
+import { createStore, Commit } from 'vuex'
+import axios from 'axios'
 interface UserProps { // 用户登录信息
   isLogin: boolean;
   name?: string;
   id?: number;
   columnId?: number;
 }
+export interface ImageProps {
+  _id?: string;
+  url?: string;
+  createdAt?: string;
+}
+export interface ColumnProps {
+  _id: string;
+  avatar?: ImageProps;
+  title: string;
+  description: string;
+}
+export interface PostProps {
+  _id: string;
+  column: string;
+  title: string;
+  image?: ImageProps;
+  content?: string;
+  excerpt?: string;
+  createdAt: string;
+}
 export interface GlobalDataProp {
+  isLoading: boolean;
   column: ColumnProps[];
-  list: ColumnList[];
+  list: PostProps[];
   user: UserProps;
+}
+// 封装的get请求
+const getPromise = async (url: string, mutationsName: string, commit: Commit) => {
+  const { data } = await axios.get(url)
+  commit(mutationsName, data)
 }
 const store = createStore<GlobalDataProp>({ // 加入泛型是为了返回指定类型的数据
   state: {
-    column: columnData,
-    list: columnList,
+    isLoading: false,
+    column: [],
+    list: [],
     user: {
       isLogin: false
     }
@@ -25,19 +52,41 @@ const store = createStore<GlobalDataProp>({ // 加入泛型是为了返回指定
     },
     createPost (state, newpost) {
       return state.list.push(newpost)
+    },
+    fetchColumns (state, rowData) {
+      state.column = rowData.data.list
+    },
+    fetchColumn (state, rowData) {
+      state.column = [rowData.data]
+      console.log(state.column);
+    },
+    fetchPost (state, rowData) {
+      state.list = rowData.data.list
+      console.log(state.list);
+    },
+    setLoading (state, status) {
+      state.isLoading = status
     }
   },
   getters: {
-    bigColumnLen (state) {
-      return state.column.filter(c => c.id > 2).length // column里面的长度在id大于2的情况下
-    },
     // 详情页面的表头，根据router的id获得
-    getColumnData: (state) => (columnId: number) => {
-      return state.column.find(column => column.id === columnId)
+    getColumnData: (state) => (columnId: string) => {
+      return state.column.find(column => column._id === columnId)
     },
     // 详情页面的表单，也是根据routerid可以获得
-    getPostData: (state) => (columnId: number) => {
-      return state.list.filter(column => column.columnId === columnId)
+    getPostData: (state) => (columnId: string) => {
+      return state.list.filter(column => column.column === columnId)
+    }
+  },
+  actions: {
+    async fetchColumns ({ commit }) {
+      getPromise('/columns', 'fetchColumns', commit)
+    },
+    fetchColumn ({ commit }, cid) {
+      getPromise(`/columns/${cid}`, 'fetchColumn', commit)
+    },
+    fetchPost ({ commit }, cid) {
+      getPromise(`/columns/${cid}/posts`, 'fetchPost', commit)
     }
   }
 })

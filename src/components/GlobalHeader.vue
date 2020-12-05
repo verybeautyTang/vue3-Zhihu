@@ -1,6 +1,6 @@
 <template>
   <nav class="nav  justify-content-between align-items-center flex-sm-row bg-primary navbar-dark">
-      <a class="navbar-brand" aria-current="page" href="#">BeautyTang Store</a>
+      <router-link to="/" class="navbar-brand" aria-current="page"  >BeautyTang Store</router-link>
       <ul v-if="!users.isLogin" class="justify-content-between align-items-center">
         <router-link to="/login" class="btn btn-primary mr-4 border-light w-20">登录</router-link>
         <li class="btn btn-primary  mr-4 border-light">注册</li>

@@ -31,7 +31,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { useStore } from 'vuex';
+import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import ValidRules, { ValidRule } from '../components/ValidRules.vue'
 import FromControl from '../components/FromControl.vue'

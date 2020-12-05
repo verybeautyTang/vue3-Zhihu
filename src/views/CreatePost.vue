@@ -68,9 +68,9 @@ export default defineComponent({
         console.log(columnId);
         if (columnId) {
           const newPost: ColumnList = {
-            id: new Date().getTime(),
+            _id: new Date().getTime(),
             title: title.value,
-            content: content.value,
+            description: content.value,
             columnId,
             createTime: new Date().toLocaleString()
           }
