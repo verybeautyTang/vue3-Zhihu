@@ -42,7 +42,7 @@ export default defineComponent({
     }
   },
   inheritAttrs: false,
-  setup(props, context) {
+  setup (props, context) {
     const inputRef = reactive({
       val: computed({
         get: () => props.modelValue || '',
