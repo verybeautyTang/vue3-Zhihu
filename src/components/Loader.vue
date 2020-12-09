@@ -26,7 +26,8 @@ export default defineComponent({
       type: String
     }
   },
-  setup () {
+  setup() {
+    // 创建节点
     const node = document.createElement('div')
     node.id = 'back'
     document.body.appendChild(node)

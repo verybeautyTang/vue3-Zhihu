@@ -1,83 +1,80 @@
 <template>
-  <from-control @form-send="formSend">
-    <div>
+  <div class="login-page mx-auto p-3 w-330">
+    <h5 class="my-4 text-center">登录到者也</h5>
+    <validate-form @form-submit="onFormSubmit">
       <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">邮箱</label>
-        <valid-rules
-          :rules="emailRule"
-          class="www"
-          v-model="emailVal"
-          placeholder="请输入邮箱名称"
+        <label class="form-label">邮箱地址</label>
+        <validate-input
+          :rules="emailRules" v-model="emailVal"
+          placeholder="请输入邮箱地址"
           type="text"
+          ref="inputRef"
         />
       </div>
       <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">密码</label>
-        <valid-rules
-          :rules="pwdRule"
-          v-model="pwdVal"
-          placeholder="请输入密码"
+        <label class="form-label">密码</label>
+        <validate-input
           type="password"
+          placeholder="请输入密码"
+          :rules="passwordRules"
+          v-model="passwordVal"
         />
       </div>
-    </div>
-    <template #submit-button>
-      <!-- #submit-button 相当于  v-slot:submit-button-->
-      <!-- v-slot的缩写是# -->
-      <button class="btn btn-danger" @form-send="formSend">提交</button>
-    </template>
-  </from-control>
+      <template #submit>
+        <button type="submit" class="btn btn-primary btn-block btn-large">登录</button>
+      </template>
+    </validate-form>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import ValidRules, { ValidRule } from '../components/ValidRules.vue'
-import FromControl from '../components/FromControl.vue'
-const emailRule: ValidRule[] = [
-  {
-    type: 'required', message: '邮箱名不能为空'
-  },
-  {
-    type: 'email', message: '请输入正确的邮箱号'
-  }
-]
-const pwdRule: ValidRule[] = [
-  {
-    type: 'required', message: '密码不能为空'
-  },
-  {
-    type: 'pwd', message: '密码必须包含数字和字母，长度6-20'
-  }
-]
+import ValidateInput, { RulesProp } from '../components/ValidateInput.vue'
+import ValidateForm from '../components/ValidateForm.vue'
+import createMessage from '../components/createMessage'
+
 export default defineComponent({
   name: 'Login',
   components: {
-    ValidRules,
-    FromControl
+    ValidateInput,
+    ValidateForm
   },
-  setup () {
-    const store = useStore()
-    const emailVal = ref('') // email的默认数值
+  setup() {
+    const emailVal = ref('')
     const router = useRouter()
-    const pwdVal = ref('')
-    // const inputRefs = ref<any>()
-    const formSend = (result: boolean) => {
-      // console.log('inputRefs', inputRefs.value.inputValid()); // 利用ref可以进行父子间通信
-      console.log('result', result)
+    const store = useStore()
+    const emailRules: RulesProp = [
+      { type: 'required', message: '电子邮箱地址不能为空' },
+      { type: 'email', message: '请输入正确的电子邮箱格式' }
+    ]
+    const passwordVal = ref('')
+    const passwordRules: RulesProp = [
+      { type: 'required', message: '密码不能为空' }
+    ]
+    const onFormSubmit = (result: boolean) => {
       if (result) {
-        router.push('/')
-        store.commit('login') // 触发mutation事件
+        const payload = {
+          email: emailVal.value,
+          password: passwordVal.value
+        }
+        store.dispatch('loginAndFetch', payload).then(data => {
+          createMessage('登录成功 2秒后跳转首页', 'success')
+          setTimeout(() => {
+            router.push('/')
+          }, 2000)
+        }).catch(e => {
+          console.log(e)
+        })
       }
     }
     return {
-      // inputRefs,
-      pwdRule,
-      pwdVal,
-      emailRule,
+      emailRules,
       emailVal,
-      formSend
+      passwordVal,
+      passwordRules,
+      onFormSubmit
     }
   }
 })
